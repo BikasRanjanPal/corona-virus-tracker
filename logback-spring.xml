@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<!-- Get the property for app name from the properties file -->
+	<springProperty scope="context" name="appName"
+		source="spring.application.name" />
+
+	<!-- Configuration when the profile is staging or prod -->
+	<springProfile name="staging,prod">
+		<appender name="FILE"
+			class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<file>logs/${appName}.log</file>
+			<rollingPolicy
+				class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+				<!-- daily rollover -->
+				<fileNamePattern>logs/archived/%d{yyyy-MM-dd}.%d.%i.log.zip
+				</fileNamePattern>
+				<!-- keep 30 days' worth of history -->
+				<maxHistory>30</maxHistory>
+				<timeBasedFileNamingAndTriggeringPolicy
+					class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+					<!-- or whenever the file size reaches 80MB -->
+					<maxFileSize>100KB</maxFileSize>
+				</timeBasedFileNamingAndTriggeringPolicy>
+			</rollingPolicy>
+			<encoder>
+				<pattern>%d %5p | %t | %-54logger{55} | %m %n</pattern>
+			</encoder>
+		</appender>
+
+		<logger name="${appName}-logger">
+			<level value="INFO" />
+		</logger>
+
+		<root>
+			<level value="INFO" />
+			<appender-ref ref="FILE" />
+		</root>
+		<root>
+			<level value="ERROR" />
+			<appender-ref ref="FILE" />
+		</root>
+
+		<root>
+			<level value="DEBUG" />
+			<appender-ref ref="FILE" />
+		</root>
+		<root>
+			<level value="TRACE" />
+			<appender-ref ref="FILE" />
+		</root>
+
+	</springProfile>
+
+	<!-- Configuration when the profile is dev -->
+	<springProfile name="dev">
+		<appender name="FILE"
+			class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<file>logs/${appName}.log</file>
+			<rollingPolicy
+				class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+				<!-- daily rollover -->
+				<fileNamePattern>logs/archived/%d{yyyy-MM-dd_HH}.%d.%i.log.zip
+				</fileNamePattern>
+				<!-- keep 30 days' worth of history -->
+				<maxHistory>30</maxHistory>
+				<timeBasedFileNamingAndTriggeringPolicy
+					class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+					<!-- or whenever the file size reaches 80MB -->
+					<maxFileSize>100KB</maxFileSize>
+				</timeBasedFileNamingAndTriggeringPolicy>
+			</rollingPolicy>
+			<encoder>
+				<pattern>%d %5p | %t | %-54logger{55} | %m %n</pattern>
+			</encoder>
+		</appender>
+
+		<logger name="${appName}-logger">
+			<level value="INFO" />
+		</logger>
+
+
+		<root>
+			<level value="INFO" />
+			<appender-ref ref="FILE" />
+		</root>
+		<root>
+			<level value="ERROR" />
+			<appender-ref ref="FILE" />
+		</root>
+		<root>
+			<level value="DEBUG" />
+			<appender-ref ref="FILE" />
+		</root>
+		<root>
+			<level value="TRACE" />
+			<appender-ref ref="FILE" />
+		</root>
+
+
+	</springProfile>
+	<!-- <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender"> 
+		<encoder> <pattern>%d %5p | %t | %-55logger{55} | %m %n</pattern> </encoder> 
+		</appender><springProperty scope="context" name="appName" source="spring.application.name"/> 
+		<logger name="${appName}-logger"> <level value="INFO"/> </logger> -->
+</configuration>
